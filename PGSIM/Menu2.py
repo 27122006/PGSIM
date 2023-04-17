@@ -7,6 +7,31 @@ from domains.information import Information
 from domains.Death_Declaration import DeathDeclaration
 from domains.Marriage import Marriage
 from domains.Birth_declaration import BirthDeclaration
+import configparser
+import Database.Create_table as create_table
+import mysql.connector
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+# Connect to MySQL server
+connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+
+# Create a new database
+database_name = "mydata"
+cursor = connect.cursor()
+cursor.execute("CREATE DATABASE IF NOT EXISTS {}".format(database_name))
+connect.database = database_name
+
+# Create the tables
+create_table.create_information_table()
+create_table.create_marriage_table()
+create_table.create_birth_table()
+create_table.create_death_table()
 
 # Create a new Tkinter window
 root = tk.Tk()

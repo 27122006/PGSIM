@@ -95,7 +95,7 @@ class Marriage:
     password=config['database']['password'],
     database=config['database']['database']
 )
-        create_table.create_marriage_table(connect)
+         
         my_cursor=connect.cursor()
         my_cursor.execute("select * from marriage")
         rows=my_cursor.fetchall()
@@ -127,7 +127,7 @@ class Marriage:
     password=config['database']['password'],
     database=config['database']['database']
 )
-            create_table.create_marriage_table(connect)
+             
             my_cursor=connect.cursor()  
             citizen_id = self.citizen_id_entry.get()
             spouse_id = self.spouse_id_entry.get()

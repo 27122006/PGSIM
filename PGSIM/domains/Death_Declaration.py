@@ -3,7 +3,10 @@ from tkinter import messagebox
 import mysql.connector
 import re
 from tkinter import ttk
+import configparser
 
+config = configparser.ConfigParser()
+config.read('config.ini')
 class DeathDeclaration:
     def __init__(self, root):
         self.root = root
@@ -96,7 +99,12 @@ class DeathDeclaration:
 
         
     def fetch_data(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )
         my_cursor=connect.cursor()
         my_cursor.execute("SELECT * FROM death")
         rows=my_cursor.fetchall()
@@ -117,7 +125,12 @@ class DeathDeclaration:
 
     def add_data(self):
         # Connect to database
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )
         my_cursor=connect.cursor() 
 
         # Get citizen information
@@ -144,7 +157,12 @@ class DeathDeclaration:
             messagebox.showerror("Error", "Citizen ID exists.")
 
     def update_data(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )        
         my_cursor=connect.cursor()
         my_cursor.execute("update death set `Date of Death`=%s,`Place of Death`=%s,`Cause of Death`=%s where `Citizen ID`=%s",
                           (self.entry_date_var.get(),
@@ -165,7 +183,12 @@ class DeathDeclaration:
         if not confirm:
             return
         
-        connect = mysql.connector.connect(host="localhost", username="root", password="Mysql@123", database="mydata")
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )
         my_cursor = connect.cursor()
         
         for item in selected_items:
@@ -177,7 +200,12 @@ class DeathDeclaration:
         self.clear()
             
     def search_data(self):
-        connect = mysql.connector.connect(host="localhost", username="root", password="Mysql@123", database="mydata")
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )
         my_cursor = connect.cursor()
         if self.search_by=="Citizen ID":
             my_cursor.execute("select * from death where `Citizen ID` LIKE '%"+str(self.search_txt.get())+"%'")

@@ -148,7 +148,6 @@ class BirthDeclaration:
     password=config['database']['password'],
     database=config['database']['database']
 )
-        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("SELECT * FROM birth")
         rows=my_cursor.fetchall()

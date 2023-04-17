@@ -218,8 +218,6 @@ class Information:
     password=config['database']['password'],
     database=config['database']['database']
 )
-        #create table if not exist
-        create_table.create_information_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("select * from information")
         rows=my_cursor.fetchall()
@@ -281,7 +279,12 @@ class Information:
         except mysql.connector.IntegrityError:
             messagebox.showerror("Error","Citizen ID Already Exist")
     def update_data(self):
-        connect = mysql.connector.connect(host="localhost", username="root", password="Mysql@123", database="mydata")
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )
         my_cursor = connect.cursor()
         my_cursor.execute("UPDATE information SET `Citizen Name` = %s, `DoB` = %s, `Gender` = %s, `Address` = %s,`Citizen ref`=%s, `Marriage Status` = %s, `Status`="" WHERE `Citizen ID`=%s",(
                 self.citizen_name.get(),
@@ -303,7 +306,6 @@ class Information:
             self.clear()
         connect.close()
 
-
     def delete_data(self):
         selected_items = self.information_table.selection()
         if not selected_items:
@@ -313,10 +315,14 @@ class Information:
         confirm = messagebox.askyesno("Confirm", "Are you sure you want to delete the selected record(s)?")
         if not confirm:
             return
-        
-        connect = mysql.connector.connect(host="localhost", username="root", password="Mysql@123", database="mydata")
+
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )
         my_cursor = connect.cursor()
-        
         for item in selected_items:
             values = self.information_table.item(item, "values")
             citizen_id = values[2]
@@ -333,7 +339,12 @@ class Information:
         self.clear()
             
     def search_data(self):
-        connect = mysql.connector.connect(host="localhost", username="root", password="Mysql@123", database="mydata")
+        connect = mysql.connector.connect(
+            host=config['database']['host'],
+            user=config['database']['user'],
+            password=config['database']['password'],
+            database=config['database']['database']
+        )
         my_cursor = connect.cursor()
         if self.search_by=="Citizen ID":
             my_cursor.execute("SELECT * FROM information WHERE `Citizen ID`=%s", (self.search.get(),))
