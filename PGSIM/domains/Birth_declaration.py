@@ -3,7 +3,6 @@ import mysql.connector
 from tkinter import ttk
 from tkinter import messagebox
 import configparser
-import Database.Create_table as create_table
 
 config = configparser.ConfigParser()
 config.read('config.ini')
