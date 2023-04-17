@@ -19,6 +19,7 @@ class Information:
         self.citizen_DOB=StringVar()
         self.address=StringVar()
         self.search=StringVar()
+        self.status=str()
 
         #title
         lbl_title=Label(self.root,text="Information",font=("times new roman",18,"bold"),bg="white",fg="green")
@@ -127,14 +128,14 @@ class Information:
         combo_Search.bind("<<ComboboxSelected>>",update_search)
         combo_Search.grid(row=0,column=1,padx=10,pady=5,sticky="w")
         
-        txt_Search=Entry(Table_Frame,font=("arial",13,"bold"),bg="lightyellow",bd=5,relief=GROOVE,width=25)
+        txt_Search=Entry(Table_Frame,font=("arial",13,"bold"),textvariable=self.search,bg="lightyellow",bd=5,relief=GROOVE,width=25)
         txt_Search.grid(row=0,column=2,padx=2)
         
         btn_Search=Button(Table_Frame,text="Search By",font=("arial",11,"bold"),command=self.search_data,bg="black",fg="yellow",width=10)
         btn_Search.grid(row=0,column=3,padx=1)
         
         
-        btn_ShowAll=Button(Table_Frame,text="Show All",font=("arial",11,"bold"),bg="black",fg="yellow",width=10)
+        btn_ShowAll=Button(Table_Frame,text="Show All",font=("arial",11,"bold"),command=self.show_all,bg="black",fg="yellow",width=10)
         btn_ShowAll.grid(row=0,column=4,padx=1)
         
 
@@ -154,7 +155,7 @@ class Information:
         scroll_y=ttk.Scrollbar(details_table,orient=VERTICAL)
         
 
-        self.information_table=ttk.Treeview(details_table,column=("Ref","Name","ID","DOB","Gender","Address","Marriage"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+        self.information_table=ttk.Treeview(details_table,column=("Ref","Name","ID","DOB","Gender","Address","Marriage","Status"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
         
         scroll_x.pack(side=BOTTOM,fill=X)
         scroll_y.pack(side=RIGHT,fill=Y)
@@ -169,6 +170,7 @@ class Information:
         self.information_table.heading("Gender",text="Gender")
         self.information_table.heading("Address",text="Address")
         self.information_table.heading("Marriage",text="Marriage")
+        self.information_table.heading("Status",text="Status")
         
         self.information_table["show"]="headings"
         
@@ -180,6 +182,7 @@ class Information:
         self.information_table.column("Gender",width=100)
         self.information_table.column("Address",width=100)
         self.information_table.column("Marriage",width=100)
+        self.information_table.column("Status",width=100)
 
         self.information_table.heading("Ref",text="Ref",command=lambda:self.sort_column("Ref"))
         self.information_table.heading("Name",text="Name",command=lambda:self.sort_column("Name"))
@@ -225,6 +228,7 @@ class Information:
         self.gender=row[4]
         self.address.set(row[5])
         self.marriage_status=row[6]
+        self.status=row[7]
 
     def clear(self):
         self.citizen_ref.set("")
@@ -237,12 +241,13 @@ class Information:
         try:
             connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
             my_cursor=connect.cursor()
-            my_cursor.execute("insert into information values(%s,%s,%s,%s,%s,%s,%s)",(
+            my_cursor.execute("insert into information values(%s,%s,%s,%s,%s,%s,%s,%s)",(
                 self.citizen_ref.get(),
                 self.citizen_name.get(),
                 self.citizen_ID.get(),
                 self.citizen_DOB.get(),
                 self.gender,
+                self.status,
                 self.address.get(),
                 self.marriage_status
             ))
@@ -261,13 +266,14 @@ class Information:
     def update_data(self):
         connect = mysql.connector.connect(host="localhost", username="root", password="Mysql@123", database="mydata")
         my_cursor = connect.cursor()
-        my_cursor.execute("UPDATE information SET `Citizen Name` = %s, `DoB` = %s, `Gender` = %s, `Address` = %s,`Citizen ref`=%s, `Marriage Status` = %s WHERE `Citizen ID`=%s",(
+        my_cursor.execute("UPDATE information SET `Citizen Name` = %s, `DoB` = %s, `Gender` = %s, `Address` = %s,`Citizen ref`=%s, `Marriage Status` = %s, `Status`="" WHERE `Citizen ID`=%s",(
                 self.citizen_name.get(),
                 self.citizen_DOB.get(),
                 self.gender,
                 self.address.get(),
                 self.citizen_ref.get(),
                 self.marriage_status,
+                self.status,
                 self.citizen_ID.get()
             ))
         if not re.match(r'^\d{2}/\d{2}/\d{4}$', self.citizen_DOB.get()):
@@ -324,9 +330,14 @@ class Information:
             for row in rows:
                 self.information_table.insert('', END, values=row)
             connect.commit()
+
         else:
             # Handle the case where no rows are returned
             print("No results found.")
         connect.close()
 
+    
+    def show_all(self):
+        self.fetch_data()
+        self.clear()
 
