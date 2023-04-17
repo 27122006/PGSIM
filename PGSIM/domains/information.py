@@ -65,7 +65,7 @@ class Information:
 
         #citizen gender with combobox
         lbl_citizen_gender=Label(lableframeleft,text="Gender",font=("times new roman",12,"bold"),bg="white")
-        lbl_citizen_gender.grid(row=4,column=0,padx=10,pady=5,sticky="w")
+        lbl_citizen_gender.grid(row=6,column=0,padx=10,pady=5,sticky="w")
 
         combo_gender=ttk.Combobox(lableframeleft,font=("arial",12,"bold"),state="readonly")
         combo_gender["value"]=("Male","Female","Other") 
@@ -76,7 +76,7 @@ class Information:
         combo_gender.bind("<<ComboboxSelected>>",update_gender)
         
         
-        combo_gender.grid(row=4,column=1,padx=10,pady=5,sticky="w")
+        combo_gender.grid(row=6,column=1,padx=10,pady=5,sticky="w")
         
         ## citizen marriage status with combobox
         lbl_citizen_marriage=Label(lableframeleft,text="Marriage Status",font=("times new roman",12,"bold"),bg="white")
