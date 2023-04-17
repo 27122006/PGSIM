@@ -175,7 +175,6 @@ class BirthDeclaration:
     password=config['database']['password'],
     database=config['database']['database']
 )
-        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("INSERT INTO birth VALUES(%s,%s,%s,%s,%s,%s,%s)",(
             self.entry_name_var.get(),
@@ -207,7 +206,6 @@ class BirthDeclaration:
     password=config['database']['password'],
     database=config['database']['database']
 )
-        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("update birth set , `Father Name`=%s, `Mother Name`=%s, `Date of Birth`=%s, `Place of Birth`=%s, Gender=%s where ID=%s",(
             self.entry_father_name_var.get(),
@@ -229,7 +227,6 @@ class BirthDeclaration:
     password=config['database']['password'],
     database=config['database']['database']
 )
-        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("delete from birth where ID=%s",self.entry_id_var.get())
         connect.commit()
