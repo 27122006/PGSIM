@@ -4,7 +4,7 @@ from tkinter import messagebox
 from tkinter import ttk
 import re
 import configparser
-import Database.Create_table as create_table
+
 
 config = configparser.ConfigParser()
 config.read('config.ini')
