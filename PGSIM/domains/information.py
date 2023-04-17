@@ -18,6 +18,7 @@ class Information:
         self.citizen_ID=StringVar()
         self.citizen_DOB=StringVar()
         self.address=StringVar()
+        self.search=StringVar()
 
         #title
         lbl_title=Label(self.root,text="Information",font=("times new roman",18,"bold"),bg="white",fg="green")
@@ -311,18 +312,21 @@ class Information:
     def search_data(self):
         connect = mysql.connector.connect(host="localhost", username="root", password="Mysql@123", database="mydata")
         my_cursor = connect.cursor()
-        if self.search_by == "Citizen ID":
-            my_cursor.execute("SELECT * FROM information WHERE `Citizen ID` = %s", (self.search_term,))
-        elif self.search_by == "Citizen Name":
-            my_cursor.execute("SELECT * FROM information WHERE `Citizen Name` = %s", (self.search_term,))
-        elif self.search_by == "Citizen ref":
-            my_cursor.execute("SELECT * FROM information WHERE `Citizen ref` = %s", (self.search_term,))
+        if self.search_by=="Citizen ID":
+            my_cursor.execute("SELECT * FROM information WHERE `Citizen ID`=%s", (self.search.get(),))
+        elif self.search_by=="Citizen Name":
+            my_cursor.execute("SELECT * FROM information WHERE `Citizen Name`=%s", (self.search.get(),))
+        elif self.search_by=="Citizen ref":
+            my_cursor.execute("SELECT * FROM information WHERE `Citizen ref`=%s", (self.search.get(),))
         rows = my_cursor.fetchall()
         if len(rows) != 0:
             self.information_table.delete(*self.information_table.get_children())
             for row in rows:
                 self.information_table.insert('', END, values=row)
             connect.commit()
+        else:
+            # Handle the case where no rows are returned
+            print("No results found.")
         connect.close()
 
 
