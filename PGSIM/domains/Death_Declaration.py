@@ -93,6 +93,8 @@ class DeathDeclaration:
         self.entry_date_var.set(row[1])
         self.entry_place_var.set(row[2])
         self.entry_cause_var.set(row[3])
+
+        
     def fetch_data(self):
         connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
         my_cursor=connect.cursor()

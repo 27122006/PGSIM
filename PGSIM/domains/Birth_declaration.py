@@ -2,6 +2,11 @@ from tkinter import *
 import mysql.connector
 from tkinter import ttk
 from tkinter import messagebox
+import configparser
+import Database.Create_table as create_table
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 class BirthDeclaration:
     def __init__(self, root):
         self.root = root
@@ -137,7 +142,13 @@ class BirthDeclaration:
        
 
     def fetch_data(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("SELECT * FROM birth")
         rows=my_cursor.fetchall()
@@ -160,7 +171,13 @@ class BirthDeclaration:
         self.entry_gender_var.set(row[6])
 
     def add_data(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("INSERT INTO birth VALUES(%s,%s,%s,%s,%s,%s,%s)",(
             self.entry_name_var.get(),
@@ -186,7 +203,13 @@ class BirthDeclaration:
         self.entry_date_var.set("")
         self.entry_gender_var.set("")
     def update_data(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("update birth set , `Father Name`=%s, `Mother Name`=%s, `Date of Birth`=%s, `Place of Birth`=%s, Gender=%s where ID=%s",(
             self.entry_father_name_var.get(),
@@ -202,7 +225,13 @@ class BirthDeclaration:
         self.clear()
 
     def delete_data(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+        create_table.create_birth_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("delete from birth where ID=%s",self.entry_id_var.get())
         connect.commit()

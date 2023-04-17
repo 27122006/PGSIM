@@ -21,7 +21,7 @@ style = ThemedStyle(root)
 style.set_theme("equilux")
 
 # Create a PhotoImage object--
-image = PhotoImage(file="Interface\khanh.png")
+image = PhotoImage(file="Interface\logo (1).png")
 # Create a Label widget with the image
 label = Label(root, image=image)
 

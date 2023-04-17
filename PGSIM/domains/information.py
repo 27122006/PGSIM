@@ -3,6 +3,11 @@ from tkinter import ttk
 from tkinter import messagebox
 import mysql.connector
 import re
+import configparser
+import Database.Create_table as create_table
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 class Information:
     def __init__(self, root):
@@ -207,7 +212,14 @@ class Information:
 
     
     def fetch_data(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+        #create table if not exist
+        create_table.create_information_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("select * from information")
         rows=my_cursor.fetchall()
@@ -239,7 +251,12 @@ class Information:
     
     def add_data(self):
         try:
-            connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+            connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
             my_cursor=connect.cursor()
             my_cursor.execute("insert into information values(%s,%s,%s,%s,%s,%s,%s,%s)",(
                 self.citizen_ref.get(),

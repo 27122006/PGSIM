@@ -3,7 +3,11 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import re
+import configparser
+import Database.Create_table as create_table
 
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 class Marriage:
     def __init__(self, master):
@@ -85,7 +89,13 @@ class Marriage:
         self.marriage_date_entry.insert(0,row[2])
 
     def fetch_marriage_info(self):
-        connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+        connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+        create_table.create_marriage_table(connect)
         my_cursor=connect.cursor()
         my_cursor.execute("select * from marriage")
         rows=my_cursor.fetchall()
@@ -111,7 +121,13 @@ class Marriage:
 
         # connect to the SQL database
         try:
-            connect=mysql.connector.connect(host="localhost",username="root",password="Mysql@123",database="mydata")
+            connect = mysql.connector.connect(
+    host=config['database']['host'],
+    user=config['database']['user'],
+    password=config['database']['password'],
+    database=config['database']['database']
+)
+            create_table.create_marriage_table(connect)
             my_cursor=connect.cursor()  
             citizen_id = self.citizen_id_entry.get()
             spouse_id = self.spouse_id_entry.get()
