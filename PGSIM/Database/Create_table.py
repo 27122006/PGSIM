@@ -39,7 +39,7 @@ def create_marriage_table():
 )
     cursor = connect.cursor()
     cursor.execute("""
-        CREATE TABLE `marriages` (
+        CREATE TABLE IF NOT EXISTS `marriages` (
         `Citizen1_ID` VARCHAR(255) NOT NULL,
         `Citizen2_ID` VARCHAR(255) NOT NULL,
         `Date` VARCHAR(50),
