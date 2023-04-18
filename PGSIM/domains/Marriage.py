@@ -5,7 +5,6 @@ from tkinter import ttk
 import re
 import configparser
 
-
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -56,22 +55,22 @@ class Marriage:
 
         #data table
         Table_Frame=Frame(self.marriage_info_frame,bd=4,relief=RIDGE)
-        Table_Frame.place(x=400,y=0,width=850,height=500)
+        Table_Frame.place(x=400,y=0,width=890,height=500)
 
         scroll_x=Scrollbar(Table_Frame,orient=HORIZONTAL)
         scroll_y=Scrollbar(Table_Frame,orient=VERTICAL)
-        self.marriage_info_table=ttk.Treeview(Table_Frame,columns=("citizen_id","spouse_id","marriage_date"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+        self.marriage_info_table=ttk.Treeview(Table_Frame,columns=("citizen_id","spouse_id","date"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
         scroll_x.pack(side=BOTTOM,fill=X)
         scroll_y.pack(side=RIGHT,fill=Y)
         scroll_x.config(command=self.marriage_info_table.xview)
         scroll_y.config(command=self.marriage_info_table.yview)
         self.marriage_info_table.heading("citizen_id",text="Citizen ID")
         self.marriage_info_table.heading("spouse_id",text="Spouse ID")
-        self.marriage_info_table.heading("marriage_date",text="Marriage Date")
+        self.marriage_info_table.heading("date",text="Date")
         self.marriage_info_table["show"]="headings"
         self.marriage_info_table.column("citizen_id",width=100)
         self.marriage_info_table.column("spouse_id",width=100)
-        self.marriage_info_table.column("marriage_date",width=100)
+        self.marriage_info_table.column("date",width=100)
         self.marriage_info_table.pack(fill=BOTH,expand=1)
         self.marriage_info_table.bind("<ButtonRelease-1>",self.get_cursor)
         self.fetch_marriage_info()
@@ -97,7 +96,7 @@ class Marriage:
 )
          
         my_cursor=connect.cursor()
-        my_cursor.execute("select * from marriage")
+        my_cursor.execute("select * from marriages")
         rows=my_cursor.fetchall()
         if len(rows)!=0:
             self.marriage_info_table.delete(*self.marriage_info_table.get_children())
@@ -139,6 +138,15 @@ class Marriage:
             citizen_status = my_cursor.fetchone()
             if citizen_status is not None and citizen_status[0] == "Married":
                 messagebox.showerror("Error", "Citizen is already married")
+            my_cursor.execute("SELECT `Status` FROM information WHERE `Citizen ID` = %s", (citizen_id,))
+            citizen_status = my_cursor.fetchone()
+            if citizen_status is not None and citizen_status[0] == "Deceased":
+                messagebox.showerror("Error", "Citizen is deceased")
+            my_cursor.execute("SELECT `Status` FROM information WHERE `Citizen ID` = %s", (spouse_id,))
+            spouse_status = my_cursor.fetchone()
+            if spouse_status is not None and spouse_status[0] == "Deceased":
+                messagebox.showerror("Error", "Spouse is deceased")
+
                 
             my_cursor.execute("SELECT `Marriage Status` FROM information WHERE `Citizen ID` = %s", (spouse_id,))
             spouse_status = my_cursor.fetchone()
@@ -166,10 +174,11 @@ class Marriage:
                 messagebox.showerror("Error", "Marriage date is required")
             elif not re.match(r"^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$", marriage_date):
                 messagebox.showerror("Error", "Marriage date must be in DD/MM/YYYY format")
+            
 
 
             else:
-                my_cursor.execute("INSERT INTO marriage VALUES (%s, %s, %s)", (citizen_id, spouse_id, marriage_date))
+                my_cursor.execute("INSERT INTO marriages VALUES (%s, %s, %s)", (citizen_id, spouse_id, marriage_date))
                 my_cursor.execute("UPDATE information SET `Marriage Status` = 'Married' WHERE `Citizen ID` = %s", (citizen_id,))
                 my_cursor.execute("UPDATE information SET `Marriage Status` = 'Married' WHERE `Citizen ID` = %s", (spouse_id,))
                 connect.commit()

@@ -143,16 +143,14 @@ class DeathDeclaration:
                 if not re.match(r'^\d{2}/\d{2}/\d{4}$', self.entry_date_var.get()):
                     messagebox.showerror("Error", "Please enter date in DD/MM/YYYY format.")
                 else:
-                    my_cursor.execute("INSERT INTO death VALUES (%s, %s,%s,%s)", (self.entry_citizen_id_var.get(), self.entry_date_var.get(),self.entry_place.get(),self.entry_cause.get()))
-                    messagebox.showinfo("Success", "Death declaration added successfully.")
-                    my_cursor.execute("DELETE FROM information WHERE `Citizen ID` = %s", (citizen_id,))
+                    my_cursor.execute("INSERT INTO death VALUES (%s, %s, %s, %s)", (citizen_id, self.entry_date_var.get(), self.entry_place_var.get(), self.entry_cause_var.get()))
+                    my_cursor.execute("UPDATE information SET `Status` = 'Deceased' WHERE `Citizen ID` = %s", (citizen_id,))
                     connect.commit()
-                    connect.close()
                     self.fetch_data()
                     self.clear()
-                    
+                    connect.close()
             else:
-                messagebox.showerror("Error", "Citizen ID not found.")
+                messagebox.showerror("Error", "Citizen ID does not exist.")
         except:
             messagebox.showerror("Error", "Citizen ID exists.")
 

@@ -18,6 +18,7 @@ connect = mysql.connector.connect(
     host=config['database']['host'],
     user=config['database']['user'],
     password=config['database']['password'],
+
 )
 
 # Create a new database
@@ -65,21 +66,21 @@ canvas2 = tk.Canvas(root, width=30, height=500, bg="#003366", highlightthickness
 canvas2.place(x = 400, y = 0)
 
 
-def add_info():
-    add_window = tk.Toplevel(root)
-    app = Information(add_window)
+def information():
+    infor_window = tk.Toplevel(root)
+    app = Information(infor_window)
 
-def update_info():
-    update_window = tk.Toplevel(root)
-    app = Marriage(update_window)
+def marriage():
+    marriage_window = tk.Toplevel(root)
+    app = Marriage(marriage_window)
 
-def delete_info():
-    delete_window = tk.Toplevel(root)
-    app = BirthDeclaration(delete_window)
+def birth():
+    birth_window = tk.Toplevel(root)
+    app = BirthDeclaration(birth_window)
 
-def search_info():
-    search_window = tk.Toplevel(root)
-    app = DeathDeclaration(search_window)
+def death():
+    death_window = tk.Toplevel(root)
+    app = DeathDeclaration(death_window)
 
 style = ttk.Style()
 
@@ -90,10 +91,10 @@ style.configure("TButton",relief='groove', bordercolor="#8D918D", borderwidth=2)
 # Create the buttons with a fixed size
 button_width = 40
 button_height = 4
-add_button = ttk.Button(root, text="Citizens information", command=add_info, width=button_width, padding=button_height)
-update_button = ttk.Button(root, text="Marriage declaration", command=update_info, width=button_width, padding=button_height)
-delete_button = ttk.Button(root, text="Birth certificate", command=delete_info, width=button_width, padding=button_height)
-search_button = ttk.Button(root, text="Death declaratiom", command=search_info, width=button_width, padding=button_height)
+add_button = ttk.Button(root, text="Citizens information", command=information, width=button_width, padding=button_height)
+update_button = ttk.Button(root, text="Marriage declaration", command=marriage, width=button_width, padding=button_height)
+delete_button = ttk.Button(root, text="Birth certificate", command=birth, width=button_width, padding=button_height)
+search_button = ttk.Button(root, text="Death declaratiom", command=death, width=button_width, padding=button_height)
 
 # Add the buttons to the window
 add_button.place(x=215, y=150+64, anchor = "center")

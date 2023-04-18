@@ -13,6 +13,7 @@ class Information:
         self.root=root
         self.root.title("Information")
         self.root.geometry("1295x550+230+220")
+        self.sort_order = None
         
         
 
@@ -204,10 +205,16 @@ class Information:
 
         
 
-    def sort_column(self,column):
-        self.information_table.heading(column,text=column,command=lambda:self.sort_column(column,not self.sort))
-        self.sort = not self.sort
-        self.fetch_data()  
+    def sort_column(self, column):
+        self.information_table.heading(column, text=column, command=lambda: self.sort_column(column))
+        if self.sort_order == "ascend":
+            self.data = sorted(self.data, key=lambda k: k[column])
+            self.sort_order = "descend"
+        else:
+            self.data = sorted(self.data, key=lambda k: k[column], reverse=True)
+            self.sort_order = "ascend"
+        self.fetch_data()
+
 
     
     def fetch_data(self):
@@ -261,9 +268,9 @@ class Information:
                 self.citizen_ID.get(),
                 self.citizen_DOB.get(),
                 self.gender,
-                self.status,
                 self.address.get(),
-                self.marriage_status
+                self.marriage_status,
+                self.status
             ))
             if self.citizen_ID.get()=="" or self.citizen_name.get()=="" or self.citizen_ref.get()=="" or self.citizen_DOB.get()=="" or self.address.get()=="":
                 messagebox.showerror("Error","All Fields are required")
@@ -285,7 +292,7 @@ class Information:
             database=config['database']['database']
         )
         my_cursor = connect.cursor()
-        my_cursor.execute("UPDATE information SET `Citizen Name` = %s, `DoB` = %s, `Gender` = %s, `Address` = %s,`Citizen ref`=%s, `Marriage Status` = %s, `Status`="" WHERE `Citizen ID`=%s",(
+        my_cursor.execute("UPDATE information SET `Citizen Name` = %s, `DoB` = %s, `Gender` = %s, `Address` = %s,`Citizen ref`=%s, `Marriage Status` = %s, `Status`=%s WHERE `Citizen ID`=%s",(
                 self.citizen_name.get(),
                 self.citizen_DOB.get(),
                 self.gender,

@@ -19,12 +19,11 @@ class BirthDeclaration:
         self.entry_mother_name_var=StringVar()
         self.entry_date_var=StringVar()
         self.entry_place_var=StringVar()
-        self.entry_gender_var=StringVar()
 
 
         # Create form labels
         lableframeleft=LabelFrame(self.root,bd=2,relief=RIDGE,font=("times new roman",12,"bold"),padx=2)
-        lableframeleft.place(x=10,y=60,width=450,height=480)
+        lableframeleft.place(x=10,y=20,width=450,height=490)
 
         lableframeright=LabelFrame(self.root,bd=2,relief=RIDGE,font=("times new roman",12,"bold"),text="Show",padx=2)
         lableframeright.place(x=470,y=10,width=800,height=500)
@@ -166,7 +165,16 @@ class BirthDeclaration:
         self.entry_mother_name_var.set(row[3])
         self.date=row[4]
         self.entry_place_var.set(row[5])
-        self.entry_gender_var.set(row[6])
+        self.gender=row[6]
+
+    def clear(self):
+        self.entry_name_var.set("")
+        self.entry_id_var.set("")
+        self.entry_father_name_var.set("")
+        self.entry_mother_name_var.set("")
+        self.entry_date_var.set("")
+        self.entry_place_var.set("")
+
 
     def add_data(self):
         connect = mysql.connector.connect(
@@ -183,22 +191,13 @@ class BirthDeclaration:
             self.entry_mother_name_var.get(),
             self.entry_date_var.get(),
             self.entry_place_var.get(),
-            self.entry_gender_var.get()
+            self.gender
 
         ))
         connect.commit()
         self.fetch_data()
         connect.close()
-
-        # Clear form fields
-        self.entry_date_var.set("")
-        self.entry_father_name_var.set("")
-        self.entry_mother_name_var.set("")
-        self.entry_name_var.set("")
-        self.entry_place_var.set("")
-        self.entry_id_var.set("")
-        self.entry_date_var.set("")
-        self.entry_gender_var.set("")
+        self.clear()
     def update_data(self):
         connect = mysql.connector.connect(
     host=config['database']['host'],
@@ -212,7 +211,7 @@ class BirthDeclaration:
             self.entry_mother_name_var.get(),
             self.entry_date_var.get(),
             self.entry_place_var.get(),
-            self.entry_gender_var.get(),
+            self.gender,
             self.entry_id_var.get()
         ))
         connect.commit()
@@ -233,13 +232,3 @@ class BirthDeclaration:
         self.fetch_data()
         connect.close()
         self.clear()
-
-    def clear(self):
-        # Clear form fields
-        self.entry_date_var.set("")
-        self.entry_father_name_var.set("")
-        self.entry_mother_name_var.set("")
-        self.entry_name_var.set("")
-        self.entry_place_var.set("")
-        self.entry_id_var.set("")
-        self.entry_date_var.set("")
