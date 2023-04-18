@@ -21,6 +21,16 @@ class BirthDeclaration:
         self.entry_date_var=StringVar()
         self.entry_place_var=StringVar()
 
+        #variable for information table
+        self.citizen_ref=str()
+        self.citizen_name=str()
+        self.citizen_ID=str()
+        self.citizen_DOB=str()
+        self.address=str()
+        self.status=str()
+        self.marriage_status=str()
+
+
 
         # Create form labels
         lableframeleft=LabelFrame(self.root,bd=2,relief=RIDGE,font=("times new roman",12,"bold"),padx=2)
@@ -199,6 +209,25 @@ class BirthDeclaration:
             self.gender
 
         ))
+        self.citizen_ref=""
+        self.citizen_name=self.entry_name_var.get()
+        self.citizen_ID=self.entry_id_var.get()
+        self.citizen_DOB=self.entry_date_var.get()
+        self.address=self.entry_place_var.get()
+        self.marriage_status="Unmarried"
+        self.status=""
+        my_cursor.execute("insert into information values(%s,%s,%s,%s,%s,%s,%s,%s)",(
+
+            self.citizen_ref,
+            self.citizen_name,
+            self.citizen_ID,
+            self.citizen_DOB,
+            self.gender,
+            self.address,
+            self.marriage_status,
+            self.status
+            
+            ))
         if self.entry_name_var.get()=="" or self.entry_id_var.get()=="" or self.entry_father_name_var.get()=="" or self.entry_mother_name_var.get()=="" or self.entry_date_var.get()=="" or self.entry_place_var.get()=="":
             messagebox.showerror("Error","All fields are required")
         elif not re.match(r'^\d{2}/\d{2}/\d{4}$', self.entry_date_var.get()):

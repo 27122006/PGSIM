@@ -232,7 +232,7 @@ class Information:
             self.information_table.delete(*self.information_table.get_children())
             for row in rows:
                 self.information_table.insert('',END,values=row)
-            connect.commit()
+        connect.commit()
         connect.close()
     def get_cursor(self,event=""):
         cursor_row=self.information_table.focus()
@@ -275,6 +275,7 @@ class Information:
             ))
             if self.citizen_ID.get()=="" or self.citizen_name.get()=="" or self.citizen_ref.get()=="" or self.citizen_DOB.get()=="" or self.address.get()=="":
                 messagebox.showerror("Error","All Fields are required")
+                
             elif not re.match(r'^\d{2}/\d{2}/\d{4}$', self.citizen_DOB.get()):
                 messagebox.showerror("Error","Enter Valid Date of Birth(DD/MM/YYYY)")
             else:
@@ -333,17 +334,17 @@ class Information:
         for item in selected_items:
             values = self.information_table.item(item, "values")
             citizen_id = values[2]
-            query = "DELETE FROM marriage WHERE `Citizen1_ID` = %s OR `Citizen2_ID` = %s"
+            query = "DELETE FROM marriages WHERE `Citizen1_ID` = %s OR `Citizen2_ID` = %s"
             value = (citizen_id, citizen_id)
             my_cursor.execute(query, value)
             query = "DELETE FROM information WHERE `citizen ID` = %s"
             value = (citizen_id,)
             my_cursor.execute(query, value)
-            connect.commit()
-        
-        connect.close()
+        connect.commit()
         self.fetch_data()
         self.clear()
+        connect.close()
+
             
     def search_data(self):
         connect = mysql.connector.connect(
