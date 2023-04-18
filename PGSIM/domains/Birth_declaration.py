@@ -3,6 +3,7 @@ import mysql.connector
 from tkinter import ttk
 from tkinter import messagebox
 import configparser
+import re
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -38,7 +39,7 @@ class BirthDeclaration:
         scroll_y=ttk.Scrollbar(lableframeright,orient=VERTICAL)
         
 
-        self.birth_table=ttk.Treeview(lableframeright,column=("Name","ID","Father's Name","Date of Birth","Place of Birth"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+        self.birth_table=ttk.Treeview(lableframeright,column=("Name","ID","Father's Name","Mother's Name","Date of Birth","Place of Birth", "Gender"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
 
         
         scroll_x.pack(side=BOTTOM,fill=X)
@@ -50,15 +51,19 @@ class BirthDeclaration:
         self.birth_table.heading("Name",text="Name")
         self.birth_table.heading("ID",text="ID")
         self.birth_table.heading("Father's Name",text="Father's Name")
+        self.birth_table.heading("Mother's Name",text="Mother's Name")
         self.birth_table.heading("Date of Birth",text="Date of Birth")
         self.birth_table.heading("Place of Birth",text="Place of Birth")
+        self.birth_table.heading("Gender",text="Gender")
         self.birth_table["show"]="headings"
 
         self.birth_table.column("Name",width=100)
         self.birth_table.column("ID",width=100)
         self.birth_table.column("Father's Name",width=100)
+        self.birth_table.column("Mother's Name",width=100)
         self.birth_table.column("Date of Birth",width=100)
         self.birth_table.column("Place of Birth",width=100)
+        self.birth_table.column("Gender",width=100)
 
         self.birth_table.pack(fill=BOTH,expand=1)
         
@@ -155,15 +160,15 @@ class BirthDeclaration:
                 self.birth_table.insert('',END,values=row)
             connect.commit()
         connect.close()
-    def get_cursor(self):
+    def get_cursor(self,ev):
         cursor_row=self.birth_table.focus()
         content=self.birth_table.item(cursor_row)
         row=content["values"]
         self.entry_name_var.set(row[0])
-        self.id=row[1]
+        self.entry_id_var.set(row[1])
         self.entry_father_name_var.set(row[2])
         self.entry_mother_name_var.set(row[3])
-        self.date=row[4]
+        self.entry_date_var.set(row[4])
         self.entry_place_var.set(row[5])
         self.gender=row[6]
 
@@ -194,10 +199,15 @@ class BirthDeclaration:
             self.gender
 
         ))
-        connect.commit()
-        self.fetch_data()
-        connect.close()
-        self.clear()
+        if self.entry_name_var.get()=="" or self.entry_id_var.get()=="" or self.entry_father_name_var.get()=="" or self.entry_mother_name_var.get()=="" or self.entry_date_var.get()=="" or self.entry_place_var.get()=="":
+            messagebox.showerror("Error","All fields are required")
+        elif not re.match(r'^\d{2}/\d{2}/\d{4}$', self.entry_date_var.get()):
+                messagebox.showerror("Error","Enter Valid Date of Birth(DD/MM/YYYY)")
+        else:
+            connect.commit()
+            self.fetch_data()
+            connect.close()
+            self.clear()
     def update_data(self):
         connect = mysql.connector.connect(
     host=config['database']['host'],
@@ -206,7 +216,8 @@ class BirthDeclaration:
     database=config['database']['database']
 )
         my_cursor=connect.cursor()
-        my_cursor.execute("update birth set , `Father Name`=%s, `Mother Name`=%s, `Date of Birth`=%s, `Place of Birth`=%s, Gender=%s where ID=%s",(
+        my_cursor.execute("update birth set `Name`=%s , `Father Name`=%s, `Mother Name`=%s, `Date of Birth`=%s, `Place of Birth`=%s, Gender=%s where ID=%s",(
+            self.entry_name_var.get(),
             self.entry_father_name_var.get(),
             self.entry_mother_name_var.get(),
             self.entry_date_var.get(),
@@ -214,11 +225,15 @@ class BirthDeclaration:
             self.gender,
             self.entry_id_var.get()
         ))
-        connect.commit()
-        self.fetch_data()
-        connect.close()
-        self.clear()
-
+        if self.entry_name_var.get()=="" or self.entry_id_var.get()=="" or self.entry_father_name_var.get()=="" or self.entry_mother_name_var.get()=="" or self.entry_date_var.get()=="" or self.entry_place_var.get()=="":
+            messagebox.showerror("Error","All fields are required")
+        elif not re.match(r'^\d{2}/\d{2}/\d{4}$', self.entry_date_var.get()):
+                messagebox.showerror("Error","Enter Valid Date of Birth(DD/MM/YYYY)")
+        else:
+            connect.commit()
+            self.fetch_data()
+            connect.close()
+            self.clear()
     def delete_data(self):
         connect = mysql.connector.connect(
     host=config['database']['host'],

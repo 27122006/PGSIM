@@ -14,6 +14,7 @@ class Information:
         self.root.title("Information")
         self.root.geometry("1295x550+230+220")
         self.sort_order = None
+        self.data=[]
         
         
 

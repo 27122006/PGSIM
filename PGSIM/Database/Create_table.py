@@ -84,7 +84,7 @@ def create_birth_table():
         `Mother Name` VARCHAR(50),
         `Date of Birth` VARCHAR(50),
         `Place of Birth` VARCHAR(100),
-        `Gender` ENUM('M', 'F')
+        `Gender` VARCHAR(10)
     )
 """)
     connect.commit()
