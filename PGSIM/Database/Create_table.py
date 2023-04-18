@@ -79,7 +79,7 @@ def create_birth_table():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS birth (
         `Name` VARCHAR(50),
-        `ID` INT(10) PRIMARY KEY,
+        `ID` VARCHAR(50) PRIMARY KEY,
         `Father Name` VARCHAR(50),
         `Mother Name` VARCHAR(50),
         `Date of Birth` VARCHAR(50),
