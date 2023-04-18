@@ -3,9 +3,12 @@ import sys
 
 # List the names of the modules you want to install
 modules_to_install = [
-    'numpy',
-    'pandas',
-    'matplotlib',
+    're',
+    'configparser',
+    'mysql',
+    'tkinter',
+    'ttkthemes',
+
 ]
 
 # Iterate through the list of modules and install them using pip
